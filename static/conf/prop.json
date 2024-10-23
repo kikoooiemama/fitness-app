@@ -1,0 +1,42 @@
+{
+  "db_name": "store.db",
+  "db_roles": {
+    "admin": "admin",
+    "trainer": "trainer",
+    "client": "client",
+    "other": "other"
+  },
+  "db_categories": {
+    "gym": 0,
+    "group": 1,
+    "pool": 2
+  },
+  "db_auth": [
+    0,
+    "admin1",
+    "12345678",
+    0,
+    1
+  ],
+  "secret_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmo6SsCMHFADKVzLJ77D",
+  "reports_dir": "reports",
+  "imgs_dir": "imgs",
+  "web_menu_items": [
+    "Сотрудники",
+    "Клиенты",
+    "Материальный учет",
+    "Выход"
+  ],
+  "web_employees_bar": [
+    "Зарегистрировать",
+    "Обновить",
+    "Удалить",
+    "Список сотрудников"
+  ],
+  "web_client_bar": [
+    "Зарегистрировать",
+    "Обновить",
+    "Удалить",
+    "Список клиентов"
+  ]
+}

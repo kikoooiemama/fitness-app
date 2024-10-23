@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Center</title>
+    <!-- Bootstrap CSS -->
+    <link href="{{url_for('static', filename='/css/bootstrap.min.css')}}" rel="stylesheet">
+    <style>
+        /* Стили для бокового меню */
+        #sidebarMenu {
+            min-height: 100vh; /* Высота на всю высоту вьюпорта */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для бокового меню */
+            z-index: 1000; /* Устанавливаем z-index, чтобы меню было поверх основного контента */
+        }
+
+        .sidebar .nav-link {
+            border-radius: 0; /* Убираем закругление углов */
+            color: #333; /* Цвет текста */
+        }
+
+        .sidebar .nav-link:hover {
+            background: #add8e6; /* Фон при наведении */
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #007bff; /* Фон для активной ссылки */
+            color: white; /* Цвет текста для активной ссылки */
+        }
+        .agenda {
+        }
+
+        /* Dates */
+        .agenda .agenda-date { width: 170px; }
+        .agenda .agenda-date .dayofmonth {
+            width: 40px;
+            font-size: 36px;
+            line-height: 36px;
+            float: left;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .agenda .agenda-date .shortdate {
+            font-size: 0.75em;
+        }
+
+        /* Times */
+        .agenda .agenda-time { width: 140px; }
+
+
+        /* Events */
+        .agenda .agenda-events {  }
+        .agenda .agenda-events .agenda-event {  }
+
+
+
+    </style>
+    <link rel="shortcut icon" href="../static/imgs/logo.svg"/>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <span>
+            <img class="mr-auto navbar-brand" src="../static/imgs/logo.svg" alt="Fitness Center" width="55px"
+                 height="55px">
+        </span>
+        <span class="me-auto navbar-brand"> <h3>Fitness Center</h3></span>
+        <div class="d-flex align-items-center">
+            <span class="me-3">Привет, Клиент</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">Выход</a>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Client Panel Layout -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Menu -->
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    {% block bar_menu %}
+                    {% endblock %}
+                    <!-- More menu items -->
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        {% if json_cp_data %}
+        {% block main_content %}{% endblock %}
+        {% else %}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Панель клиента</h1>
+            </div>
+
+            <!-- Content goes here -->
+            <div class="d-flex align-items-start">
+                {% block empty_main_block %}{% endblock %}
+            </div>
+        </main>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="{{url_for('static', filename='/js/bootstrap.bundle.min.js')}}"></script>
+</body>
+</html>

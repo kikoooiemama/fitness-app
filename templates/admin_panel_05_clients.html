@@ -1,0 +1,76 @@
+{% extends "admin_panel.html" %}
+{% block bar_menu %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_bids') }}">
+        <span data-feather="home"></span>
+        Заявки
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_employees') }}">
+        <span data-feather="home"></span>
+        Сотрудники
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{{ url_for('ap_clients') }}">
+        <span data-feather="home"></span>
+        Клиенты
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_reports') }}">
+        <span data-feather="home"></span>
+        Отчеты
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_price_list') }}">
+        <span data-feather="home"></span>
+        Прейскурант
+    </a>
+</li>
+{% endblock %}
+{% block main_content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Панель администратора</h1>
+    </div>
+    <div class="container-fluid">
+        <!--        <table class="table w-100">-->
+        <table class="table table-hover w-100 mt-3">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Дата рождения</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Дата регистрации</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j_value in json_ap_data %}
+            <tr>
+                <th class="align-middle" scope="row">{{loop.index}}</th>
+                <td class="align-middle">{{ j_value.name }}</td>
+                <td class="align-middle">{{ j_value.date_of_birth }}</td>
+                <td class="align-middle">{{ j_value.email }}</td>
+                <td class="align-middle">{{ j_value.phone }}</td>
+                <td class="align-middle">{{ j_value.created_at }}</td>
+                <td class="align-middle col-1">
+                    <form action="/ap_clients_del/" method="POST">
+                        <!-- скрытый параметр -->
+                        <input type="hidden" id="del_client_id" name="del_client_id" value={{ j_value.user_id }}>
+                        <input type="submit" class="btn btn-primary" value="Удалить">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
+{% block empty_main_block %}<p>Клиенты пока отсутствуют или их не удалось загрузить из БД</p>{% endblock %}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <!-- Bootstrap CSS -->
+    <link href="{{url_for('static', filename='/css/bootstrap.min.css')}}" rel="stylesheet">
+</head>
+<body>
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card w-100" style="max-width: 400px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">Регистрация</h3>
+            {% if error %}
+            <div class="mb-2">
+                <h5 class="card-title text-center mb-4">{{error}}</h5>
+            </div>
+            {% endif %}
+            <form action="/register_handler" method="post" autocomplete="off">
+                <div class="mb-2">
+                    <label for="inputUsername" class="form-label ">Логин</label>
+                    <input type="text" name="username" class="form-control .input-sm" id="inputUsername">
+                </div>
+                <div class="mb-2">
+                    <label for="inputPassword" class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" id="inputPassword">
+                </div>
+                <div class="mb-2">
+                    <label for="inputName" class="form-label">ФИО</label>
+                    <input type="text" name="name" class="form-control" id="inputName">
+                </div>
+                <div class="mb-2">
+                    <label for="inputEmail" class="form-label">E-mail</label>
+                    <input type="email" name="email" class="form-control" id="inputEmail">
+                </div>
+                <div class="mb-2">
+                    <label for="inputPhone" class="form-label">Телефон</label>
+                    <input type="text" name="phone" class="form-control" id="inputPhone">
+                </div>
+                <div class="mb-3">
+                    <label for="inputBirthday" class="form-label">Дата рождения:</label>
+                    <input type="date" name="birthday" class="form-control" id="inputBirthday">
+                </div>
+                <div class="mb-4 form-check">
+                    <label class="mx-4 radio-inline">
+                        <input class="mx-1" type="radio" name="role" value="client" checked>Клиент
+                    </label>
+                    <label class="mx-5 radio-inline">
+                        <input class="mx-1" type="radio" name="role" value="trainer">Тренер
+                    </label>
+                </div>
+                <div class="mb-2 d-grid gap-2 col-6 mx-auto">
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="{{url_for('static', filename='/js/bootstrap.bundle.min.js')}}"></script>
+</body>
+</html>

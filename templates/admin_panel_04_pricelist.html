@@ -1,0 +1,218 @@
+{% extends "admin_panel.html" %}
+{% block bar_menu %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_bids') }}">
+        <span data-feather="home"></span>
+        Заявки
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_employees') }}">
+        <span data-feather="home"></span>
+        Сотрудники
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_clients') }}">
+        <span data-feather="home"></span>
+        Клиенты
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ url_for('ap_reports') }}">
+        <span data-feather="home"></span>
+        Отчеты
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{{ url_for('ap_price_list') }}">
+        <span data-feather="home"></span>
+        Прейскурант
+    </a>
+</li>
+{% endblock %}
+{% block main_content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Панель администратора</h1>
+    </div>
+    <div class="container-fluid">
+        <!--        <table class="table w-100">-->
+        <table class="table w-100 mt-3">
+            <thead>
+            <tr>
+                <th scope="col" class="align-middle col-1">Тренер</th>
+                <th scope="col" class="align-middle col-1">Дата рождения</th>
+                <th scope="col" class="align-middle col-1"></th>
+                <th scope="col">Занятие</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Комментарий</th>
+                <th scope="col">Цена</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for j_key, j_value in json_ap_data.items() %}
+            {% if j_value.services|length > 0 %}
+            {% for serv in j_value.services%}
+            <tr>
+                {% if loop.first %}
+                <td rowspan="{{loop.length}}" class="align-middle">{{ j_value.name }}</td>
+                <td rowspan="{{loop.length}}" class="align-middle">{{ j_value.date_of_birth }}</td>
+                <td rowspan="{{loop.length}}" class="align-middle">
+
+                    <!-- Кнопка-триггер модального окна тренера -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#regServiceTrainer{{ j_key }}">
+                        Добавить
+                    </button>
+
+                    <!-- Модальное окно тренера -->
+                    <div class="modal fade" id="regServiceTrainer{{ j_key }}" tabindex="-1"
+                         aria-labelledby="regTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="regTrainerLabel{{ j_key }}">Добавление
+                                        занятия</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/price_trainer_handler" method="post" autocomplete="off">
+                                        <!-- скрытый параметры -->
+                                        <input type="hidden" id="trainer_id{{ j_key }}"
+                                               name="trainer_id" value={{ j_key }}>
+                                        <div class="mb-2">
+                                            <label for="inputTaskTrainer{{ j_key }}" class="form-label">Занятие</label>
+                                            <input type="text" name="task" class="form-control .input-sm"
+                                                   id="inputTaskTrainer{{ j_key }}">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="inputPriceTrainer{{ j_key }}"
+                                                   class="form-label">Цена</label>
+                                            <input type="number" name="price" class="form-control"
+                                                   id="inputPriceTrainer{{ j_key }}">
+                                        </div>
+                                        <div class="mb-2 form-check">
+                                            <label class="mx-1 radio-inline">
+                                                <input class="mx-1" type="radio" name="category" value="0" checked>Зал
+                                            </label>
+                                            <label class="mx-1 radio-inline"><input class="mx-1" type="radio" name="category" value="1">Групповые занятия</label>
+                                            <label class="mx-1 radio-inline">
+                                                <input class="mx-1" type="radio" name="category" value="2">Бассейн
+                                            </label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="inputCommentTrainer{{ j_key }}"
+                                                   class="form-label">Комментарий</label>
+                                            <textarea class="form-control" name="comment"
+                                                      id="inputCommentTrainer{{ j_key }}"
+                                                      rows="3"></textarea>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary">Добавить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                {% endif%}
+                <td class="align-middle col-1">{{ serv.service }}</td>
+                <td class="align-middle col-1">{{ serv.category }}</td>
+                <td class="align-middle col-3">{{ serv.comment }}</td>
+                <td class="align-middle col-1">{{ serv.price }}</td>
+                <td class="align-middle col-1">
+                    <form action="/ap_pl_del/" method="POST">
+                        <!-- скрытый параметр -->
+                        <input type="hidden" id="del_service_id{{ j_key }}{{ loop.index }}" name="del_service_id"
+                               value={{ serv.service_id }}>
+                        <input type="submit" class="btn btn-primary" value="Удалить">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td rowspan="1" class="align-middle">{{ j_value.name }}</td>
+                <td rowspan="1" class="align-middle">{{ j_value.date_of_birth }}</td>
+                <td rowspan="1" class="align-middle">
+                    <!-- Кнопка-триггер модального окна тренера -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#regServiceTrainerElse{{ j_key }}">
+                        Добавить
+                    </button>
+
+                    <!-- Модальное окно тренера -->
+                    <div class="modal fade" id="regServiceTrainerElse{{ j_key }}" tabindex="-1"
+                         aria-labelledby="regTrainerLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="regTrainerLabel">Добавление занятия</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/price_trainer_handler" method="post" autocomplete="off">
+                                        <!-- скрытый параметры -->
+                                        <input type="hidden" id="trainer_idElse{{ j_key }}" name="trainer_id" value={{
+                                               j_key }}>
+                                        <div class="mb-2">
+                                            <label for="inputTaskTrainerElse{{ j_key }}"
+                                                   class="form-label">Занятие</label>
+                                            <input type="text" name="task" class="form-control .input-sm"
+                                                   id="inputTaskTrainerElse{{ j_key }}">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="inputPriceTrainerElse{{ j_key }}"
+                                                   class="form-label">Цена</label>
+                                            <input type="number" name="price" class="form-control"
+                                                   id="inputPriceTrainerElse{{ j_key }}">
+                                        </div>
+                                        <div class="mb-2 form-check">
+                                            <label class="mx-1 radio-inline">
+                                                <input class="mx-1" type="radio" name="category" value="0" checked>Зал
+                                            </label>
+                                            <label class="mx-1 radio-inline">
+                                                <input class="mx-1" type="radio" name="category" value="1">Групповые
+                                                занятия
+                                            </label>
+                                            <label class="mx-1 radio-inline">
+                                                <input class="mx-1" type="radio" name="category" value="2">Бассейн
+                                            </label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="inputCommentTrainerElse{{ j_key }}" class="form-label">Комментарий</label>
+                                            <textarea class="form-control" name="comment"
+                                                      id="inputCommentTrainerElse{{ j_key }}"
+                                                      rows="3"></textarea>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary">Добавить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <td class="align-middle col-1"></td>
+                <td class="align-middle col-1"></td>
+                <td class="align-middle col-3"></td>
+                <td class="align-middle col-1"></td>
+                <td class="align-middle col-1">
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
+{% block empty_main_block %}<p>Информация о тренерах пока отсутствует в БД или их ее не удалось
+    получить</p>{% endblock %}
